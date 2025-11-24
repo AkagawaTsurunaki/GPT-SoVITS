@@ -1,3 +1,4 @@
+from typing import Tuple
 from torch.nn.functional import *
 from torch.nn.functional import (
     _mha_shape_check,
@@ -239,7 +240,8 @@ def multi_head_attention_forward_patched(
         assert (
             in_proj_weight is not None
         ), "use_separate_proj_weight is False but in_proj_weight is None"
-        q, k, v = _in_projection_packed(query, key, value, in_proj_weight, in_proj_bias)
+        q, k, v = _in_projection_packed(
+            query, key, value, in_proj_weight, in_proj_bias)
     else:
         assert (
             q_proj_weight is not None
@@ -270,12 +272,13 @@ def multi_head_attention_forward_patched(
             cache["k"][cache["stage"]] = k
             # print(0,cache["k"].shape)
             cache["v"][cache["stage"]] = v
-        else:  ###12个layer每个都要留自己的cache_kv
+        else:  # 12个layer每个都要留自己的cache_kv
             # print(1,cache["k"].shape)
             cache["k"][cache["stage"]] = torch.cat(
                 [cache["k"][cache["stage"]], k], 0
-            )  ##本来时序是1，但是proj的时候可能transpose了所以时序到0维了
-            cache["v"][cache["stage"]] = torch.cat([cache["v"][cache["stage"]], v], 0)
+            )  # 本来时序是1，但是proj的时候可能transpose了所以时序到0维了
+            cache["v"][cache["stage"]] = torch.cat(
+                [cache["v"][cache["stage"]], v], 0)
             # print(2, cache["k"].shape)
             src_len = cache["k"][cache["stage"]].shape[0]
             k = cache["k"][cache["stage"]]
@@ -419,13 +422,15 @@ def multi_head_attention_forward_patched(
         attn_output = torch.bmm(attn_output_weights, v)
 
         attn_output = (
-            attn_output.transpose(0, 1).contiguous().view(tgt_len * bsz, embed_dim)
+            attn_output.transpose(0, 1).contiguous().view(
+                tgt_len * bsz, embed_dim)
         )
         attn_output = linear(attn_output, out_proj_weight, out_proj_bias)
         attn_output = attn_output.view(tgt_len, bsz, attn_output.size(1))
 
         # optionally average attention weights over heads
-        attn_output_weights = attn_output_weights.view(bsz, num_heads, tgt_len, src_len)
+        attn_output_weights = attn_output_weights.view(
+            bsz, num_heads, tgt_len, src_len)
         if average_attn_weights:
             attn_output_weights = attn_output_weights.mean(dim=1)
 
@@ -454,7 +459,8 @@ def multi_head_attention_forward_patched(
         )
 
         attn_output = (
-            attn_output.permute(2, 0, 1, 3).contiguous().view(bsz * tgt_len, embed_dim)
+            attn_output.permute(2, 0, 1, 3).contiguous().view(
+                bsz * tgt_len, embed_dim)
         )
 
         attn_output = linear(attn_output, out_proj_weight, out_proj_bias)
