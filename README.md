@@ -1,6 +1,6 @@
 <div align="center">
 
-
+## 这个分支下的GPT-SoVITS目前尚未支持python3.9
 <h1>GPT-SoVITS-WebUI</h1>
 A Powerful Few-shot Voice Conversion and Text-to-Speech WebUI.<br><br>
 
@@ -45,10 +45,8 @@ For users in China, you can [click here](https://www.codewithgpu.com/i/RVC-Boss/
 
 ### Tested Environments
 
-- Python 3.9, PyTorch 2.0.1, CUDA 11
 - Python 3.10.13, PyTorch 2.1.2, CUDA 12.3
-- Python 3.9, PyTorch 2.2.2, macOS 14.4.1 (Apple silicon)
-- Python 3.9, PyTorch 2.2.2, CPU devices
+- Python 3.10, PyTorch 2.6.0, macOS 26.2 (Apple silicon)
 
 _Note: numba==0.56.4 requires py<3.11_
 
@@ -61,7 +59,7 @@ If you are a Windows user (tested with win>=10), you can [download the integrate
 ### Linux
 
 ```bash
-conda create -n GPTSoVits python=3.9
+conda create -n GPTSoVits python=3.10
 conda activate GPTSoVits
 bash install.sh
 ```
@@ -75,7 +73,7 @@ bash install.sh
 3. Install the program by running the following commands:
 
 ```bash
-conda create -n GPTSoVits python=3.9
+conda create -n GPTSoVits python=3.10
 conda activate GPTSoVits
 pip install -r requirements.txt
 ```
