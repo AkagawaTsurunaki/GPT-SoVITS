@@ -347,6 +347,8 @@ hash -r
 
 run_pip_quiet -r requirements.txt
 
+run_pip_quiet git+https://github.com/AkagawaTsurunaki/zerolan-data.git
+
 echo -e "${SUCCESS}Python Dependencies Installed"
 
 PY_PREFIX=$(python -c "import sys; print(sys.prefix)")
